@@ -26,4 +26,58 @@
     <dependency id="org.santedb.uicore" version="1.0.0.0"/>
     <dependency id="org.santedb.i18n.en" version="1.0.0.0"/>
   </info>
+
+  <!-- 
+    - Errors - You can define custom error pages when the renderer encounters an erorr
+    <errors>
+      <add code="403" asset="/org.santedb.sample/views/error/elevate.html" />
+    </errors>
+  -->
+
+  <!--
+    - Menus - You define the menu items you want to append to the core SanteDB user interfaces
+    -         here. This example would add a menu item to the SanteDB admin context. You can 
+    -         define you own contexts to provide an easy extension for other applets. Note that
+    -         launch is a reference to a ui-sref
+    - <menuItem context="org.santedb.admin" launch="santedb-sample" asset="/org.santedb.sample/views/index.html">
+    -   <icon>fas fa-cog</icon>
+    -   <text lang="en">My Sample Menu Section</text>
+    -   <menuItem context="org.santedb.admin" launch="santedb-sample.dashboard" asset="/org.santedb.sample/view/dashboard.html">
+    -     <icon>fas fa-cog</icon>
+    -     <text lang="en">Sub-Menu</text>
+    -   </menuItem>
+    - </menuItem>
+  -->
+
+  <!--
+    - View Models - View models are used by the SanteDB persistence engine to pre-fetch data for your
+    -               query results to reduce the amount of roundtrips which are required to the server
+    - <viewModel key="relationship_full">
+    -   <definition>/org.santedb.sample/model/relationship_full.xml</definition>
+    - </viewModel>
+  -->
+
+  <!-- Configuraion - Allows you to configure key settings to be used in the host context
+    -  <configuration>
+    -   <appSettings>
+    -     <add name="" value=""/>
+    -   </appSettings>
+    -  </configuration>
+   -->
+
+   <!-- Locales - Allows you to load custom files and javascript assets depending on the user's 
+     -            setting for locale
+     -  <locales>
+     -    <locale code="en">
+     -      <asset>/path/to/asset</asset>
+     -    </locale>
+     -  </locales>
+     -->
+
+    <!-- Localization Strings - Substitutions which you want replaced by the server. Also permits
+      -                         controlling messages which come from the server
+      -->
+    <strings lang="en">
+      <string key="ui.sample.welcome">Welcome to my Module!</string>
+    </strings>
 </AppletManifest>

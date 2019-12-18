@@ -18,7 +18,16 @@
  * User: justin
  * Date: 2018-11-14
  */
-
 angular.module('santedb').controller('SampleLayoutController', ["$scope", "$rootScope", "$state", "$templateCache", function ($scope, $rootScope, $state, $templateCache) {
 
+    // Perform a search 
+    var doSearch = async function(name) {
+        try {
+            $scope.results = await SanteDB.resources.patient.find({ "name.component.value" : name });
+        } catch (e) {
+            $rootScope.errorHandler(e);
+        }
+    }
+
+    doSearch($scope.search).then(()=>$scope.$apply());
 }]);

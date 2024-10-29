@@ -1,6 +1,7 @@
 ﻿/*
- * Copyright 2015-2018 Mohawk College of Applied Arts and Technology
- * 
+ * Copyright (C) 2021 - 2024, SanteSuite Inc. and the SanteSuite Contributors (See NOTICE.md for full copyright notices)
+ * Copyright (C) 2019 - 2021, Fyfe Software Inc. and the SanteSuite Contributors
+ * Portions Copyright (C) 2015-2018 Mohawk College of Applied Arts and Technology
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you 
  * may not use this file except in compliance with the License. You may 
@@ -13,9 +14,6 @@
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the 
  * License for the specific language governing permissions and limitations under 
  * the License.
- * 
- * User: justin
- * Date: 2018-7-23
  */
 if(!SanteDBBre)
     var SanteDBBre =
@@ -100,6 +98,9 @@ if(!SanteDBBre)
             // Validators loaded
             var _validators = [];
 
+            // New Guid function for front end
+            this.NewGuid = SanteDB.application.newGuid;
+
             /**
              * @class
              * @constructor
@@ -116,6 +117,7 @@ if(!SanteDBBre)
              * @memberof SanteDBBre
              */
             this.IssuePriority = IssuePriority;
+
             /**
              * @enum
              * @summary Represents execution environments
@@ -149,6 +151,7 @@ if(!SanteDBBre)
              * @summary Adds a business rule to the business rule engine
              * @description This method will add a business rule to the engine. A business rule can be executed before, after insert, update, delete or query. The business rules
              * engine also allows for the passing of a guard condition which guards execution of the method only if the inbound object matches the provided guard. 
+             * @param {string} id A unique identifier for this trigger (to prevent duplicate execution)
              * @param {string} type The type of object the trigger is being assigned to
              * @param {string} trigger The trigger for the object
              * @param {any} guard The guard condition for the trigger. Note that these can only be simple property evaluations of property=value
@@ -163,8 +166,9 @@ if(!SanteDBBre)
              *      return obs;
              * });
              */
-            this.AddBusinessRule = function (type, trigger, guard, callback) {
+            this.AddBusinessRule = function (id, type, trigger, guard, callback) {
                 _triggers.push({
+                    id: id,
                     type: type,
                     trigger: trigger,
                     guard: guard,
@@ -256,4 +260,3 @@ if(!SanteDBBre)
 
             };
         }();
-

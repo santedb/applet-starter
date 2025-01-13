@@ -856,6 +856,13 @@ function APIWrapper(_config) {
 function ResourceWrapper(_config) {
 
     /**
+     * @summary Get the resource this resource wrapper is configured 
+     * @memberof ResourceWrapper
+     * @returns (string} The resource that this handler handes
+     */
+    this.getResource = () => _config.resource;
+
+    /**
      * @method getUrl
      * @summary Gets the URL to this resource base
      * @memberof ResourceWrapper
@@ -1717,7 +1724,7 @@ function ResourceWrapper(_config) {
     *   }
     * }
     */
-    this.invokeOperationAsync = function (id, operation, parameters, upstream, viewModel, state) {
+    this.invokeOperationAsync = function (id, operation, parameters, upstream, viewModel, expectType, contentType, state) {
 
 
         if (!operation)
@@ -1756,8 +1763,8 @@ function ResourceWrapper(_config) {
             data: requestParms,
             state: state,
             resource: url,
-            contentType: _config.accept
-
+            contentType: contentType || _config.accept,
+            dataType: expectType
         });
     }
 };
@@ -2048,7 +2055,7 @@ function SanteDBWrapper() {
                             var targetProperty = rel.playerModel || rel.targetModel;
 
                             if (targetProperty && !targetProperty.classConcept && targetProperty.templateModel) {
-                                var object = await _resources.template.getAsync(targetProperty.templateModel.mnemonic, "full", parms);
+                                var object = await _resources.template.getAsync(`${targetProperty.templateModel.mnemonic}/skel`, "full", parms);
 
                                 // Initialize the template 
                                 if (object.tag) {
@@ -2599,10 +2606,11 @@ function SanteDBWrapper() {
          * @method doUpdateAsync
          * @memberof SanteDBWrapper.ApplicationApi
          */
-        this.doUpdateAsync = function () {
+        this.doUpdateAsync = function (noPrompt) {
             return _app.postAsync({
-                resource: "Update",
-                contentType: 'application/json'
+                resource: "$update",
+                contentType: 'application/json',
+                data: { _apply: noPrompt }
             });
         }
         /**
@@ -2901,7 +2909,7 @@ function SanteDBWrapper() {
          * @returns {any} The templated object
          */
         this.getTemplateContentAsync = async function (templateId, parms) {
-            var template = await _resources.template.getAsync(templateId, "full", parms);
+            var template = await _resources.template.getAsync(`${templateId}/skel`, "full", parms);
             if (template.relationship) { // Find relationship templates
                 template.relationship = await getSubTemplates(template.relationship, parms);
             }
@@ -3097,6 +3105,29 @@ function SanteDBWrapper() {
         });
 
         /**
+        * @type {ResourceWrapper}
+        * @memberof SanteDBWrapper.ResourceApi
+        * @summary Represents a resource wrapper that persists a data template definition
+        */
+        this.dataTemplateDefinition = new ResourceWrapper({
+            accept: "application/json",
+            resource: 'DataTemplateDefinition', 
+            api: _ami
+        });
+
+        /**
+            * @type {ResourceWrapper}
+            * @memberof SanteDBWrapper.ResourceApi
+            * @summary Represents an resource wrapper that interoperates with the concept relationship type handler
+            */
+        this.conceptRelationshipType = new ResourceWrapper({
+            accept: _viewModelJsonMime,
+            resource: "ConceptRelationshipType",
+            api: _hdsi
+        });
+
+        
+        /**
             * @type {ResourceWrapper}
             * @memberof SanteDBWrapper.ResourceApi
             * @summary Represents an resource wrapper that interoperates with the care planner
@@ -3106,6 +3137,7 @@ function SanteDBWrapper() {
             resource: "CarePlan",
             api: _hdsi
         });
+
         /**
         * @type {ResourceWrapper}
         * @memberof SanteDBWrapper.ResourceApi
@@ -4837,7 +4869,13 @@ function SanteDBWrapper() {
             day: 'YYYY-MM-DD',
             hour: 'YYYY-MM-DD HH',
             minute: 'YYYY-MM-DD HH:mm',
-            second: 'YYYY-MM-DD HH:mm:ss'
+            second: 'YYYY-MM-DD HH:mm:ss',
+            human: {
+                month: 'MMMM, YYYY',
+                day: 'dddd MMMM D, YYYY',
+                hour: 'dddd MMMM D, YYYY [at] hh A',
+                minute: 'dddd MMMM D, YYYY [at] hh:mm A'
+            }
         };
 
 

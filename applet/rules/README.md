@@ -6,9 +6,9 @@ of the SanteDB persistence layer by changing data before or after it is persiste
 The rules are expressed in JavaScript 5 format:
 
 ```
-/// <reference path="../.ref/js/santedb-bre.js" />
-/// <reference path="../.ref/js/santedb-model.js" />
-/// <reference path="../.ref/js/santedb.js" />
+/// <reference path="../../.ref/js/santedb-bre.js" />
+/// <reference path="../../.ref/js/santedb-model.js" />
+/// <reference path="../../.ref/js/santedb.js" />
 
 // Add a rule 
 SanteDBBre.AddBusinessRule(
